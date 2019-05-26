@@ -1,0 +1,13 @@
+diff --git a/tools/build/install-moar-runner.pl b/tools/build/install-moar-runner.pl
+index 7925d54a2..3cd95af9c 100755
+--- a/tools/build/install-moar-runner.pl
++++ b/tools/build/install-moar-runner.pl
+@@ -6,7 +6,7 @@ use warnings;
+ use 5.008;
+ use File::Spec;
+ 
+-my $relocatable = 1;
++my $relocatable = 0;
+ 
+ my ($destdir, $prefix, $lib_dir, $moar) = @ARGV;
+ my $realpath = $destdir.$prefix;
