@@ -9,7 +9,10 @@
 
 stdenv.mkDerivation rec {
   name = "rakudo-${version}";
-  version = "2019.05-25-2b1e5a";
+  # To update ${version}:
+  # - check out the rev
+  # - run: git describe --match "2*"
+  version = "2019.03.1-475-g2b1e5ab40";
   src = fetchgit {
     url = "git://github.com/vrurg/rakudo";
     rev = "2b1e5ab40f650e70dc6cff95f18337da421f304b";
@@ -18,6 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl nqp ];
   # propogatedBuildInputs = [ nqp ];
+  preConfigure = "echo ${version} > tools/templates/VERSION";
   configureScript = "perl ./Configure.pl";
   configureFlags =
     [ "--backends=moar"
