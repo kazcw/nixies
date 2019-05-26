@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perl nqp ];
-  # propogatedBuildInputs = [ nqp ];
+  propogatedBuildInputs = [ nqp ]; # FIXME--shouldn't be necessary
   preConfigure = "echo ${version} > tools/templates/VERSION";
   configureScript = "perl ./Configure.pl";
   configureFlags =
@@ -28,6 +28,14 @@ stdenv.mkDerivation rec {
       "--with-nqp=${nqp}/bin/nqp"
       "--no-relocatable"
     ];
+
+  # Workaround: rakudo tries to install .moarvm modules into nqp path under
+  # rakudo prefix, so the modules are in 3 different places (PERL6_HOME, nqp
+  # installation, rakudo's nqp modules).
+  # The solution here is to gather everything into one hierarchy in PERL6_HOME.
+  postInstall = "ln -s ${nqp}/share/nqp/lib/*.moarvm $out/share/perl6/lib/; mv $out/share/nqp/lib/Perl6 $out/share/perl6/lib/";
+
+  # Other problem: NQP_HOME is wrong. For now must run like: NQP_HOME=`which nqp`/../../share/nqp perl6
 
   meta = with stdenv.lib; {
     description = "A Perl 6 implementation";
@@ -37,11 +45,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ kazcw ];
   };
 }
-
-# problems:
-# - NQP_HOME is getting set relative to rakudo prefix, in relocatable mode
-#   - using no-relocatable doesn't seem to switch it to the STATIC_*_HOME code
-#     paths, but it looks like basically the same thing would happen there
-# - rakudo tries to install .moarvm modules into nqp path under rakudo prefix,
-#   so the modules are in 3 different places (PERL6_HOME, nqp installation,
-#   rakudo's nqp modules)
