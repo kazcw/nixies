@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, git, perl, moar }:
+{ stdenv, fetchgit, perl, moar }:
 
 stdenv.mkDerivation rec {
   name = "nqp-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     files/nqp-non-relocatable.patch
   ];
 
-  buildInputs = [ perl moar git ];
+  buildInputs = [ perl moar ];
   preConfigure = "echo ${version} > VERSION";
   configureScript = "perl ./Configure.pl";
   configureFlags = [

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, perl, icu, zlib, gmp, readline, nqp }:
+{ stdenv, fetchgit, perl, nqp }:
 
 #  version = "2019.05-25-aec988";
 #  src = fetchgit {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mz5py701d8wr65kidkq26piq0rbd26qr9rjpbgfha389l64cmsv";
   };
 
-  buildInputs = [ icu zlib gmp readline perl nqp ];
+  buildInputs = [ perl nqp ];
   # propogatedBuildInputs = [ nqp ];
   configureScript = "perl ./Configure.pl";
   configureFlags =
