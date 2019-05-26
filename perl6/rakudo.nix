@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, perl, nqp }:
+{ stdenv, fetchgit, perl, nqp, makeWrapper }:
 
 #  version = "2019.05-25-aec988";
 #  src = fetchgit {
@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mz5py701d8wr65kidkq26piq0rbd26qr9rjpbgfha389l64cmsv";
   };
 
-  buildInputs = [ perl nqp ];
-  propogatedBuildInputs = [ nqp ]; # FIXME--shouldn't be necessary
+  buildInputs = [ perl nqp makeWrapper ];
   preConfigure = "echo ${version} > tools/templates/VERSION";
   configureScript = "perl ./Configure.pl";
   configureFlags =
@@ -29,13 +28,13 @@ stdenv.mkDerivation rec {
       "--no-relocatable"
     ];
 
-  # Workaround: rakudo tries to install .moarvm modules into nqp path under
-  # rakudo prefix, so the modules are in 3 different places (PERL6_HOME, nqp
-  # installation, rakudo's nqp modules).
-  # The solution here is to gather everything into one hierarchy in PERL6_HOME.
-  postInstall = "ln -s ${nqp}/share/nqp/lib/*.moarvm $out/share/perl6/lib/; mv $out/share/nqp/lib/Perl6 $out/share/perl6/lib/";
-
-  # Other problem: NQP_HOME is wrong. For now must run like: NQP_HOME=`which nqp`/../../share/nqp perl6
+  # Workarounds for 2 problems:
+  # - rakudo tries to install .moarvm modules into nqp path under rakudo
+  #   prefix, so the modules are in 3 different places (PERL6_HOME, nqp
+  #   installation, rakudo's nqp modules). The solution here is to move
+  #   the misplaced modules into PERL6_HOME.
+  # - NQP_HOME is wrong. Fixed here with a wrapper.
+  postInstall = "mv $out/share/nqp/lib/Perl6 $out/share/perl6/lib/; wrapProgram $out/bin/perl6 --set NQP_HOME ${nqp}/share/nqp";
 
   meta = with stdenv.lib; {
     description = "A Perl 6 implementation";
