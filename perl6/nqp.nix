@@ -2,7 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "nqp-${version}";
-  version = "2019.05.25-0bb659";
+  # To update ${version}
+  # - check out the rev
+  # - run: git describe --tags "--match=20*"
+  version = "2019.03-192-g0bb659205";
   src = fetchgit {
     url = "git://github.com/perl6/nqp";
     rev = "0bb659205474f7e1e7bc3dc6d1859d9552f659f1";
@@ -14,6 +17,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ perl moar git ];
+  preConfigure = "echo ${version} > VERSION";
   configureScript = "perl ./Configure.pl";
   configureFlags = [
     "--backends=moar"

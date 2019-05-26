@@ -16,11 +16,6 @@ stdenv.mkDerivation rec {
     sha256 = "0mz5py701d8wr65kidkq26piq0rbd26qr9rjpbgfha389l64cmsv";
   };
 
-  patches = [
-    files/rakudo-skip-version-check.patch
-    files/rakudo-nqp-search-path.patch
-  ];
-
   buildInputs = [ icu zlib gmp readline perl nqp ];
   # propogatedBuildInputs = [ nqp ];
   configureScript = "perl ./Configure.pl";
