@@ -1,7 +1,0 @@
-diff --git a/tools/templates/MOAR_REVISION b/tools/templates/MOAR_REVISION
-index 3bdd3de84..45a44acea 100644
---- a/tools/templates/MOAR_REVISION
-+++ b/tools/templates/MOAR_REVISION
-@@ -1 +1 @@
--2019.05-11-g248e298
-+2019.05

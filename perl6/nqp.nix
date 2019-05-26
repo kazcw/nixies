@@ -11,7 +11,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     files/nqp-non-relocatable.patch
-    files/nqp-moar-revision.patch
   ];
 
   buildInputs = [ perl moar git ];

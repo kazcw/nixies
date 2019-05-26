@@ -2,7 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "moar-${version}";
-  version = "2019.05-24-2ccc20";
+  # To update ${version}:
+  # - check out the rev
+  # - run: git describe --tags "--match=20*"
+  version = "2019.05-18-g2ccc20fb5";
   src = fetchgit {
     url = "git://github.com/MoarVM/MoarVM";
     rev = "2ccc20fb591ea3b55e41dee7f7fdb5494d0c71be";
@@ -10,6 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perl ];
+  preConfigure = "echo ${version} > VERSION";
   configureScript = "perl ./Configure.pl";
 
   meta = with stdenv.lib; {
