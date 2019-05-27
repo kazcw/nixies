@@ -1,22 +1,15 @@
 { stdenv, fetchgit, perl, nqp, makeWrapper }:
 
-#  version = "2019.05-25-aec988";
-#  src = fetchgit {
-#    url = "git://github.com/rakudo/rakudo";
-#    rev = "aec988726c881c2d6d02c3b656bfad69abe07994";
-#    sha256 = "190skyrj20i4np1kln6dyasxhajb9fdra5m90954xw4jqfnrhjxi";
-#  };
-
 stdenv.mkDerivation rec {
   name = "rakudo-${version}";
   # To update ${version}:
   # - check out the rev
   # - run: git describe --match "2*"
-  version = "2019.03.1-475-g2b1e5ab40";
+  version = "2019.03.1-477-ge35c61550";
   src = fetchgit {
-    url = "git://github.com/vrurg/rakudo";
-    rev = "2b1e5ab40f650e70dc6cff95f18337da421f304b";
-    sha256 = "0mz5py701d8wr65kidkq26piq0rbd26qr9rjpbgfha389l64cmsv";
+    url = "git://github.com/rakudo/rakudo";
+    rev = "e35c61550988717a28b191e22608ffd9b04ff953";
+    sha256 = "12b9mx6nnjljp9lbm4m8q4505vzszzmifmd8jyar05wp03x67v2r";
   };
 
   buildInputs = [ perl nqp makeWrapper ];
