@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ rakudo makeWrapper ];
   installPhase = ''mkdir -p $out; HOME=$TMPDIR perl6 -I. bin/zef -to="inst#$out" install .'';
-  postFixup = ''for x in $out/bin/*; do wrapProgram $x --set PERL6LIB "inst#$out"; done'';
+  postFixup = ''for x in $out/bin/*; do wrapProgram $x --prefix PERL6LIB , "inst#$out"; done'';
 
   meta = with stdenv.lib; {
     description = "Perl6 Module Management";
