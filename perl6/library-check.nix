@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ zef ];
   preInstall = ''mkdir -p $out/home'';
   installPhase = ''HOME=$out/home zef -to="inst#$out" install .'';
+  perl6Module = true;
+  requiredPerl6Modules = [];
   meta = with stdenv.lib; {
     description = "Quick hack to determine whether a shared libray is present";
     homepage = https://github.com/jonathanstowe/LibraryCheck;

@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   '';
   preInstall = ''mkdir -p $out/home'';
   installPhase = ''HOME=$out/home PERL6LIB='inst#${LibraryCheck}' zef -to="inst#$out" install .'';
+  perl6Module = true;
+  requiredPerl6Modules = [ LibraryCheck ];
   meta = with stdenv.lib; {
     homepage = https://github.com/drforr/perl6-readline;
     description = "Perl 6 interface to GNU Readline, the CLI-based line reading library";
