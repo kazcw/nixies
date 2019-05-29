@@ -1,8 +1,9 @@
-{ stdenv, perl6Packages, fetchurl, zef, LibraryCheck, readline70 }:
+{ stdenv, rakudo, perl6Packages, fetchurl, LibraryCheck, readline70 }:
 
 let
   modules = [ LibraryCheck ];
   perl6lib = perl6Packages.makePerl6Path modules;
+  instDist = ./tools/install-dist.p6;
 in stdenv.mkDerivation rec {
   name = "Readline-${version}";
   version = "0.1.5";
@@ -10,15 +11,18 @@ in stdenv.mkDerivation rec {
     url = "mirror://cpan/authors/id/J/JG/JGOFF/Perl6/${name}.tar.gz";
     sha256 = "0kbl0s15whxs30d1nslklqfcq1zl5vj27b7h8892qjdp8h81ivif";
   };
-  buildInputs = [ zef ] ++ [ readline70 ] ++ modules;
+  buildInputs = [ rakudo ] ++ [ readline70 ] ++ modules;
   postPatch = ''
     sed -i \
       -e 's!is native( LIBREADLINE )!is native( "${readline70}/lib/libreadline.so.7" )!' \
       -e 's!cglobal( LIBREADLINE,!cglobal( "${readline70}/lib/libreadline.so.7",!' \
       lib/Readline.pm;
   '';
-  preInstall = ''mkdir -p $out/home'';
-  installPhase = ''HOME=$out/home PERL6LIB='${perl6lib}' zef -to="inst#$out" install .'';
+  buildPhase = ''
+    mkdir nix-build0 nix-build1
+    HOME=nix-build0 RAKUDO_RERESOLVE_DEPENDENCIES=0 perl6 -I'${perl6lib}' ${instDist} --for=vendor --to=nix-build1
+  '';
+  installPhase = "mv nix-build1 $out";
   perl6Module = true;
   requiredPerl6Modules = modules;
   meta = with stdenv.lib; {

@@ -1,4 +1,4 @@
-{ stdenv, perl6Packages , pkgs, makeWrapper, modules ? [] }:
+{ stdenv, perl6Packages, pkgs, makeWrapper, modules ? [] }:
 
 let
   rakudo-unwrapped = pkgs.callPackage ./rakudo-unwrapped.nix { };
@@ -17,9 +17,6 @@ stdenv.mkDerivation rec {
     EOF
     chmod +x perl6
   '';
-  installPhase = ''
-    mkdir -p $out/bin
-    mv perl6 $out/bin/
-  '';
+  installPhase = ''install -Dt $out/bin perl6'';
   propagatedBuildInputs = modules;
 }
