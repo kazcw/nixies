@@ -53,6 +53,7 @@ sub MAIN {
 
   # smoke test the new version
   die unless run qww{nix-shell -p "rakudo.withPackages(p6: [p6.JSON-Tiny])" --run true};
+  die unless run qww{nix-shell -p "rakudo.withPackages(p6: [p6.Readline])" --run true};
 
   # commit
   my $n = @results.elems;
