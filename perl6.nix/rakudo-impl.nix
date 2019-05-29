@@ -1,13 +1,8 @@
-{ stdenv, pkgs, makeWrapper, modules ? [] }:
+{ stdenv, perl6Packages , pkgs, makeWrapper, modules ? [] }:
 
 let
   rakudo-unwrapped = pkgs.callPackage ./rakudo-unwrapped.nix { };
-  hasPerl6Module = drv: drv?perl6Module;
-  requiredPerl6Modules = drvs: let
-    mods = pkgs.lib.filter hasPerl6Module drvs;
-  in pkgs.lib.unique (mods ++ pkgs.lib.concatLists (pkgs.lib.catAttrs "requiredPerl6Modules" mods));
-  makePerl6Path = drvs: stdenv.lib.concatMapStringsSep "," (x: "inst#${x}") (requiredPerl6Modules drvs);
-  perl6lib = makePerl6Path modules;
+  perl6lib = perl6Packages.makePerl6Path modules;
 in
 stdenv.mkDerivation rec {
   name = "rakudo-${version}";

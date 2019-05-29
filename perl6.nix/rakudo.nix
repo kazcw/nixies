@@ -1,7 +1,6 @@
-{ stdenv, pkgs, fetchgit, perl, nqp, makeWrapper, rakudo }:
+{ stdenv, perl6Packages, pkgs, fetchgit, perl, nqp, makeWrapper, rakudo }:
 
 let
-  perl6Packages = pkgs.callPackage ./perl6-packages.nix { };
   rakudo = pkgs.callPackage ./rakudo-impl.nix { };
 in
   rakudo // {
