@@ -1,0 +1,13 @@
+{
+    "name"          : "Nix::Prefetch::Git",
+    "version"       : "0",
+    "perl"          : "6.d",
+    "author"        : "github:kazcw",
+    "authors"       : [ "Kaz Wesley" ],
+    "description"   : "nix-prefetch-git wrapper",
+    "depends"       : [ "JSON::Tiny" ],
+    "provides"      : {
+        "Nix::Prefetch::Git":             "NixPrefetchGit.pm6"
+    },
+    "license"       : "Artistic-2.0"
+}

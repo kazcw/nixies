@@ -1,7 +1,8 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i perl6 -p git -p nix-prefetch-git -p "rakudo.withPackages(p6: [p6.JSON-Tiny])"
+#! nix-shell -i perl6 -p git -p "rakudo.withPackages(p6: with p6; [JSON-Tiny Nix-Prefetch-Git])"
 
 use JSON::Tiny;
+use Nix::Prefetch::Git;
 
 grammar Fetchgit {
   regex TOP { .* <fetchgit> .* }
@@ -70,17 +71,14 @@ sub update($pkg) {
   my ($url, $rev, $sha) = $fgmatch.made<url rev sha256>;
 
   # fetch the repo
-  my $npg = run(«nix-prefetch-git --fetch-submodules --leave-dotGit --deepClone --url "$url"», :out, :err) or die;
-  my $npg_json = from-json($npg.out.slurp: :close);
-  my $npg_err = $npg.err.slurp: :close;
-  my ($newrev, $newsha) = $npg_json<rev sha256>;
+  my $repo = NixGitRepo::new: :url($url) :fetch-submodules :leave-dotGit :deepClone;
+  my ($newrev, $newsha, $newrepo) = ($repo.rev, $repo.sha256, $repo.path);
 
   # so is there an update?
   return if $newsha eq $sha;
   die if $rev eq $newrev;
 
   # git-describe to get version
-  my $newrepo = ($npg_err ~~ m:s<^^path is ("/nix/store/"\N+)$$>)[0];
   my $git-describe = run(<git describe --tags --match 2*>, :cwd($newrepo), :out) or die;
   my $newver = ($git-describe.out.slurp: :close).chomp;
 
