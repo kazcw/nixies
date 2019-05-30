@@ -14,7 +14,7 @@ rec {
   LibraryCheck = pkgs.callPackage ./library-check.nix { };
   LWP-Simple = pkgs.callPackage ./lwp-simple.nix { inherit MIME-Base64 URI JSON-Tiny; };
   MIME-Base64 = pkgs.callPackage ./mime-base64.nix { };
-  Readline = pkgs.callPackage ./readline.nix { inherit LibraryCheck ; };
+  Readline = pkgs.callPackage ./readline.nix { };
   URI = pkgs.callPackage ./uri.nix { };
   XML = pkgs.callPackage ./xml.nix { };
 }
