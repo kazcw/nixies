@@ -92,9 +92,7 @@ sub update($pkg) {
   $data .= subst($sha, $newsha);
   $data .= subst($rev, $newrev);
   $data .= subst(qq[version = "$ver"], qq[version = "$newver"]);
-  my $wh = $pkgpath.open(:w);
-  $wh.write($data.encode);
-  $wh.close;
+  $pkgpath.spurt($data.encode);
   run «git add "$pkgpath"»;
   "$name: $ver -> $newver"
 }
