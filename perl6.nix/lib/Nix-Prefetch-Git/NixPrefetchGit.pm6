@@ -34,4 +34,14 @@ class NixGitRepo is export {
             $!path = (.err.slurp(:close) ~~ m:s<^^path is ("/nix/store/"\N+)$$>)[0].IO;
         }
     }
+
+    method fetch-expr() {
+        qq:to/END/.chomp
+        \{
+            url = "$.url";
+            rev = "$.rev";
+            sha256 = "$.sha256";
+          }
+        END
+    }
 }
