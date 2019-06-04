@@ -1,8 +1,8 @@
-{ stdenv, rakudo, perl6Packages, fetchgit, File-Which, File-Find }:
+{ stdenv, rakudo, perl6lib, fetchgit, File-Which, File-Find }:
 let
   instDist = ./tools/install-dist.p6;
   modules = [File-Which File-Find];
-  perl6lib = perl6Packages.makePerl6Path modules;
+  modpath = perl6lib.makePerl6Path modules;
 in stdenv.mkDerivation rec {
   name = "Shell-Command-${version}";
   version = "1145ea";
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ rakudo ] ++ modules;
   buildPhase = ''
     mkdir nix-build0 nix-build1
-    HOME=nix-build0 RAKUDO_RERESOLVE_DEPENDENCIES=0 perl6 -I '${perl6lib}' ${instDist} --for=vendor --to=nix-build1
+    HOME=nix-build0 RAKUDO_RERESOLVE_DEPENDENCIES=0 perl6 -I '${modpath}' ${instDist} --for=vendor --to=nix-build1
   '';
   installPhase = "mv nix-build1 $out";
   perl6Module = true;

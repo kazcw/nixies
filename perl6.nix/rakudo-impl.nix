@@ -1,8 +1,8 @@
-{ stdenv, perl6Packages, pkgs, makeWrapper, modules ? [] }:
+{ stdenv, perl6lib, pkgs, makeWrapper, nqp, modules ? [] }:
 
 let
-  rakudo-unwrapped = pkgs.callPackage ./rakudo-unwrapped.nix { };
-  perl6lib = perl6Packages.makePerl6Path modules;
+  rakudo-unwrapped = pkgs.callPackage ./rakudo-unwrapped.nix { inherit nqp; };
+  modpath = perl6lib.makePerl6Path modules;
 in
 stdenv.mkDerivation rec {
   name = "rakudo-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     cat <<EOF > perl6
     #!/bin/sh
-    exec ${rakudo-unwrapped}/bin/perl6 -I "${perl6lib}" "\$@"
+    exec ${rakudo-unwrapped}/bin/perl6 -I "${modpath}" "\$@"
     EOF
     chmod +x perl6
   '';

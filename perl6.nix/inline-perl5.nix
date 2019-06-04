@@ -1,9 +1,9 @@
-{ stdenv, rakudo, perl6Packages, fetchurl, LibraryMake, perl }:
+{ stdenv, rakudo, perl6lib, fetchurl, LibraryMake, perl }:
 let
   instDist = ./tools/install-dist.p6;
   modules = [];
   buildModules = [LibraryMake];
-  buildLib = perl6Packages.makePerl6Path buildModules;
+  buildLib = perl6lib.makePerl6Path buildModules;
 in stdenv.mkDerivation rec {
   name = "Inline-Perl5-${version}";
   version = "0.38";

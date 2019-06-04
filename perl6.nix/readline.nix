@@ -1,4 +1,4 @@
-{ stdenv, rakudo, perl6Packages, fetchurl, readline70 }:
+{ stdenv, rakudo, perl6lib, fetchurl, readline70 }:
 
 let
   instDist = ./tools/install-dist.p6;

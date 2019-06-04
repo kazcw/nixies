@@ -1,8 +1,8 @@
-{ stdenv, rakudo, perl6Packages, fetchgit, LibraryMake, linenoise }:
+{ stdenv, rakudo, perl6lib, fetchgit, LibraryMake, linenoise }:
 
 let
   modules = [ LibraryMake ];
-  perl6lib = perl6Packages.makePerl6Path modules;
+  modpath = perl6lib.makePerl6Path modules;
   instDist = ./tools/install-dist.p6;
 in stdenv.mkDerivation rec {
   name = "Linenoise-${version}";
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
   '';
   buildPhase = ''
     mkdir nix-build0 nix-build1
-    HOME=nix-build0 RAKUDO_RERESOLVE_DEPENDENCIES=0 perl6 -I'${perl6lib}' ${instDist} --for=vendor --to=nix-build1
+    HOME=nix-build0 RAKUDO_RERESOLVE_DEPENDENCIES=0 perl6 -I'${modpath}' ${instDist} --for=vendor --to=nix-build1
   '';
   installPhase = "mv nix-build1 $out";
   perl6Module = true;

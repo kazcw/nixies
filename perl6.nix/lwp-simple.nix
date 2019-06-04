@@ -1,9 +1,9 @@
-{ stdenv, rakudo, perl6Packages, fetchgit, MIME-Base64, URI, JSON-Tiny }:
+{ stdenv, rakudo, perl6lib, fetchgit, MIME-Base64, URI, JSON-Tiny }:
 
 let
   modules = [ MIME-Base64 URI ];
   checkModules = [ JSON-Tiny ];
-  perl6lib = perl6Packages.makePerl6Path (modules ++ checkModules);
+  modpath = perl6lib.makePerl6Path (modules ++ checkModules);
   instDist = ./tools/install-dist.p6;
 in stdenv.mkDerivation rec {
   name = "LWP-Simple-${version}";
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ rakudo ] ++ modules ++ checkModules;
   buildPhase = ''
     mkdir nix-build0 nix-build1
-    HOME=nix-build0 RAKUDO_RERESOLVE_DEPENDENCIES=0 perl6 -I'${perl6lib}' ${instDist} --for=vendor --to=nix-build1
+    HOME=nix-build0 RAKUDO_RERESOLVE_DEPENDENCIES=0 perl6 -I'${modpath}' ${instDist} --for=vendor --to=nix-build1
   '';
   installPhase = "mv nix-build1 $out";
   perl6Module = true;

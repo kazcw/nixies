@@ -1,8 +1,8 @@
-{ stdenv, rakudo, perl6Packages, fetchgit, gumbo, XML }:
+{ stdenv, rakudo, perl6lib, fetchgit, gumbo, XML }:
 
 let
   modules = [ XML ];
-  perl6lib = perl6Packages.makePerl6Path modules;
+  modpath = perl6lib.makePerl6Path modules;
   instDist = ./tools/install-dist.p6;
 in stdenv.mkDerivation rec {
   name = "Gumbo-${version}";
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
   prePatch = ''sed -i 's:&GenMyLibName:"${gumbo}/lib/libgumbo.so.1":' lib/Gumbo/Binding.pm6'';
   buildPhase = ''
     mkdir nix-build0 nix-build1
-    HOME=nix-build0 RAKUDO_RERESOLVE_DEPENDENCIES=0 perl6 -I'${perl6lib}' ${instDist} --for=vendor --to=nix-build1
+    HOME=nix-build0 RAKUDO_RERESOLVE_DEPENDENCIES=0 perl6 -I'${modpath}' ${instDist} --for=vendor --to=nix-build1
   '';
   installPhase = "mv nix-build1 $out";
   perl6Module = true;
