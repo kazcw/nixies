@@ -1,0 +1,13 @@
+{
+    "name"          : "Git::Repo",
+    "version"       : "0",
+    "perl"          : "6.d",
+    "author"        : "github:kazcw",
+    "authors"       : [ "Kaz Wesley" ],
+    "description"   : "yet another git interface",
+    "depends"       : [],
+    "provides"      : {
+        "Git::Repo":             "GitRepo.pm6"
+    },
+    "license"       : "Artistic-2.0"
+}
