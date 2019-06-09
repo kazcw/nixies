@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl git ];
   preConfigure = "echo ${version} > VERSION";
-  configureScript = "perl ./Configure.pl";
+  configureScript = "perl ./Configure.pl --debug=1";
+  dontStrip = true;
 
   meta = with stdenv.lib; {
     description = "A VM with adaptive optimization and JIT compilation, built for Rakudo Perl 6";
